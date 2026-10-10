@@ -142,6 +142,7 @@ function render(){
   $('#editor-nav').hidden=!owner;$('#logout').hidden=!authUser;$('#login').hidden=!!authUser;
   $$('nav a').forEach(a=>a.classList.toggle('active',a.dataset.view===view));
   $('#mode').textContent=preview?'LOCAL PREVIEW · Includes labeled screenshot examples. Your edits stay in this browser until exported or imported into Firebase.':owner?'EDITOR · Connected to Firebase. Your published entries are visible to visitors.':'PUBLIC ARCHIVE · Browse freely. Editing is reserved for the archive owner.';
+  if(!preview&&authUser&&!owner)$('#mode').textContent=`Signed in as ${authUser.email||'a Google account'}, but editor access could not be matched. Account UID: ${authUser.uid}. Configured owner UID: ${ownerUid}.`;
   if(view==='archive')renderArchive();if(view==='calendar')renderCalendar();if(view==='events')renderEvents();if(['series','eras'].includes(view))renderCollections();if(view==='resources')renderResources();if(view==='editor')renderEditor();
   for(const [field,list]of [['event',events.map(e=>e.name)],['series',videos.map(e=>e.series)],['era',videos.map(e=>e.era)]])$('#'+field+'-list').innerHTML=[...new Set(list.filter(Boolean))].map(s=>`<option value="${esc(s)}">`).join('');
 }
